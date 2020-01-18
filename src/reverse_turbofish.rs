@@ -26,6 +26,10 @@ impl<'a> FromParam<'a> for ReverseTurboFish {
 
     fn from_param(param: &'a RawStr) -> Result<Self, Self::Error> {
         let param_cow = param.percent_decode().map_err(|_| param)?;
+        if param_cow.len() < 4 {
+            return Err(param);
+        }
+
         let (front, rest) = param_cow.split_at(1);
         let (mid, back) = rest.split_at(rest.len() - 3);
 

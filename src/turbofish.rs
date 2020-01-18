@@ -26,6 +26,10 @@ impl<'a> FromParam<'a> for TurboFish {
 
     fn from_param(param: &'a RawStr) -> Result<Self, Self::Error> {
         let param_cow = param.percent_decode().map_err(|_| param)?;
+        if param_cow.len() < 4 {
+            return Err(param);
+        }
+
         let (back, rest) = param_cow.split_at(3);
         let (mid, front) = rest.split_at(rest.len() - 1);
 
